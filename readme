@@ -1,0 +1,9 @@
+PROJECT 3: Mathematical Model/Formula (DUE APR 2) Represent a formula/math model
+
+    Goal: to educate a person learning about formulas or math models through games or a video tutorial
+    Target User (depends on complexity of formula): Grades 6-12, University: Non-CS/Math majors, Adults: informal learner (post-school)
+    Formula: mathematical models, expressions
+    Formula examples: algebraic equestion(s), differential equestion(s)
+    Must include at least two representations: (1) the formula structure/syntax, and (2) a symbolic manipulation or numerical execution capability.
+    NOTE: Your project can include additional representations (models, data, code, formulas) if they are functionally related to this project's main representations. However, at a minimum, they must include the previously specified representations. 
+
