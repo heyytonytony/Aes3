@@ -6,6 +6,10 @@ using System.Collections;
 [RequireComponent (typeof (Drivetrain))]
 public class CarController : MonoBehaviour {
 
+	//state
+	public int state = 0;
+	private bool[] flags = new bool[10];
+	
 	// Add all wheels of the car here, so brake and steering forces can be applied to them.
 	public Wheel[] wheels;
 	
@@ -28,10 +32,7 @@ public class CarController : MonoBehaviour {
 	float steering;
 	float lastShiftTime = -1;
 	float handbrake;
-	
-	//state
-	public int state = 0;
-	private bool[] flags = new bool[10];
+		
 	// cached Drivetrain reference
 	Drivetrain drivetrain;
 	
@@ -216,8 +217,8 @@ public class CarController : MonoBehaviour {
 				w.handbrake = handbrake;
 				w.steering = steering;
 			}
-		}	
-			
+		}
+		
 		
 		//State changes
 		if( centerOfMass.position.x > 1130 && centerOfMass.position.x < 1170 
@@ -231,7 +232,6 @@ public class CarController : MonoBehaviour {
 			state = 0;
 			Time.timeScale = 1;
 		}
-			
 	}
 	
 	void OnGUI()
@@ -246,5 +246,7 @@ public class CarController : MonoBehaviour {
 		GUI.Label(new Rect(Screen.width-250,60,200,50),"Center:" + centerOfMass.position +"\n" + "State: " + state, "box");
 		//GUI.Label(new Rect(Screen.width-100,60,100,200),"km/h: " + rigidbody.velocity.magnitude * 3.6f, "box");
 		//tractionControl = GUI.Toggle(new Rect(0,80,300,20), tractionControl, "Traction Control (bypassed by shift key)");
+		
+		GUI.Label(new Rect(Screen.width - 160, Screen.height - 80, 80, 20), Mathf.Round(rigidbody.velocity.magnitude * 3.6f) + " km/h");
 	}
 }

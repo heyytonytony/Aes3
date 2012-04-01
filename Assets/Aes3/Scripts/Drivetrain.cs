@@ -161,9 +161,9 @@ public class Drivetrain : MonoBehaviour {
 	}
 	
 	// Debug GUI. Disable when not needed.
-	void OnGUI () {
-		GUILayout.Label("RPM: "+rpm);
-		GUILayout.Label("Gear: "+(gear-1));
-		//automatic = GUILayout.Toggle(automatic, "Automatic Transmission");
+	void OnGUI ()
+	{
+		GUI.Label(new Rect(Screen.width - 100, Screen.height - 30, 80, 20), "RPM:  " + Mathf.Round(rpm));
+		GUI.Label(new Rect(Screen.width - 220, Screen.height - 30, 90, 20), "Gear:  " + gear);
 	}
 }
