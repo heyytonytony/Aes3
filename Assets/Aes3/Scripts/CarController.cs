@@ -216,7 +216,7 @@ public class CarController : MonoBehaviour {
 	
 	void OnGUI()
 	{
-		GUI.Label(new Rect(Screen.width-100,60,100,200),"km/h: " + rigidbody.velocity.magnitude * 3.6f, "box");
-		tractionControl = GUI.Toggle(new Rect(0,80,300,20), tractionControl, "Traction Control (bypassed by shift key)");
+		
+		GUI.Label(new Rect(Screen.width - 160, Screen.height - 80, 80, 20), Mathf.Round(rigidbody.velocity.magnitude * 3.6f) + " km/h");
 	}
 }
