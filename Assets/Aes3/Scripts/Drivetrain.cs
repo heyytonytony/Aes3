@@ -164,6 +164,6 @@ public class Drivetrain : MonoBehaviour {
 	void OnGUI () {
 		GUILayout.Label("RPM: "+rpm);
 		GUILayout.Label("Gear: "+(gear-1));
-		automatic = GUILayout.Toggle(automatic, "Automatic Transmission");
+		//automatic = GUILayout.Toggle(automatic, "Automatic Transmission");
 	}
 }

@@ -28,7 +28,10 @@ public class CarController : MonoBehaviour {
 	float steering;
 	float lastShiftTime = -1;
 	float handbrake;
-		
+	
+	//state
+	public int state = 0;
+	private bool[] flags = new bool[10];
 	// cached Drivetrain reference
 	Drivetrain drivetrain;
 	
@@ -94,129 +97,154 @@ public class CarController : MonoBehaviour {
 	
 	void Update () 
 	{
-		// Steering
-		Vector3 carDir = transform.forward;
-		float fVelo = rigidbody.velocity.magnitude;
-		Vector3 veloDir = rigidbody.velocity * (1/fVelo);
-		float angle = -Mathf.Asin(Mathf.Clamp( Vector3.Cross(veloDir, carDir).y, -1, 1));
-		float optimalSteering = angle / (wheels[0].maxSteeringAngle * Mathf.Deg2Rad);
-		if (fVelo < 1)
-			optimalSteering = 0;
-				
-		float steerInput = 0;
-		if (Input.GetKey (KeyCode.LeftArrow))
-			steerInput = -1;
-		if (Input.GetKey (KeyCode.RightArrow))
-			steerInput = 1;
-
-		if (steerInput < steering)
-		{
-			float steerSpeed = (steering>0)?(1/(steerReleaseTime+veloSteerReleaseTime*fVelo)) :(1/(steerTime+veloSteerTime*fVelo));
-			if (steering > optimalSteering)
-				steerSpeed *= 1 + (steering-optimalSteering) * steerCorrectionFactor;
-			steering -= steerSpeed * Time.deltaTime;
-			if (steerInput > steering)
-				steering = steerInput;
-		}
-		else if (steerInput > steering)
-		{
-			float steerSpeed = (steering<0)?(1/(steerReleaseTime+veloSteerReleaseTime*fVelo)) :(1/(steerTime+veloSteerTime*fVelo));
-			if (steering < optimalSteering)
-				steerSpeed *= 1 + (optimalSteering-steering) * steerCorrectionFactor;
-			steering += steerSpeed * Time.deltaTime;
+		if(state == 0){
+			// Steering
+			Vector3 carDir = transform.forward;
+			float fVelo = rigidbody.velocity.magnitude;
+			Vector3 veloDir = rigidbody.velocity * (1/fVelo);
+			float angle = -Mathf.Asin(Mathf.Clamp( Vector3.Cross(veloDir, carDir).y, -1, 1));
+			float optimalSteering = angle / (wheels[0].maxSteeringAngle * Mathf.Deg2Rad);
+			if (fVelo < 1)
+				optimalSteering = 0;
+					
+			float steerInput = 0;
+			if (Input.GetKey (KeyCode.LeftArrow))
+				steerInput = -1;
+			if (Input.GetKey (KeyCode.RightArrow))
+				steerInput = 1;
+	
 			if (steerInput < steering)
-				steering = steerInput;
-		}
-		
-		// Throttle/Brake
-
-		bool accelKey = Input.GetKey (KeyCode.UpArrow);
-		bool brakeKey = Input.GetKey (KeyCode.DownArrow);
-		
-		if (drivetrain.automatic && drivetrain.gear == 0)
-		{
-			accelKey = Input.GetKey (KeyCode.DownArrow);
-			brakeKey = Input.GetKey (KeyCode.UpArrow);
-		}
-		
-		if (Input.GetKey (KeyCode.LeftShift))
-		{
-			throttle += Time.deltaTime / throttleTime;
-			throttleInput += Time.deltaTime / throttleTime;
-		}
-		else if (accelKey)
-		{
-			if (drivetrain.slipRatio < 0.10f)
+			{
+				float steerSpeed = (steering>0)?(1/(steerReleaseTime+veloSteerReleaseTime*fVelo)) :(1/(steerTime+veloSteerTime*fVelo));
+				if (steering > optimalSteering)
+					steerSpeed *= 1 + (steering-optimalSteering) * steerCorrectionFactor;
+				steering -= steerSpeed * Time.deltaTime;
+				if (steerInput > steering)
+					steering = steerInput;
+			}
+			else if (steerInput > steering)
+			{
+				float steerSpeed = (steering<0)?(1/(steerReleaseTime+veloSteerReleaseTime*fVelo)) :(1/(steerTime+veloSteerTime*fVelo));
+				if (steering < optimalSteering)
+					steerSpeed *= 1 + (optimalSteering-steering) * steerCorrectionFactor;
+				steering += steerSpeed * Time.deltaTime;
+				if (steerInput < steering)
+					steering = steerInput;
+			}
+			
+			// Throttle/Brake
+	
+			bool accelKey = Input.GetKey (KeyCode.UpArrow);
+			bool brakeKey = Input.GetKey (KeyCode.DownArrow);
+			
+			if (drivetrain.automatic && drivetrain.gear == 0)
+			{
+				accelKey = Input.GetKey (KeyCode.DownArrow);
+				brakeKey = Input.GetKey (KeyCode.UpArrow);
+			}
+			
+			if (Input.GetKey (KeyCode.LeftShift))
+			{
 				throttle += Time.deltaTime / throttleTime;
-			else if (!tractionControl)
-				throttle += Time.deltaTime / throttleTimeTraction;
-			else
-				throttle -= Time.deltaTime / throttleReleaseTime;
-
-			if (throttleInput < 0)
-				throttleInput = 0;
-			throttleInput += Time.deltaTime / throttleTime;
-			brake = 0;
-		}
-		else 
-		{
-			if (drivetrain.slipRatio < 0.2f)
-				throttle -= Time.deltaTime / throttleReleaseTime;
-			else
-				throttle -= Time.deltaTime / throttleReleaseTimeTraction;
-		}
-		throttle = Mathf.Clamp01 (throttle);
-
-		if (brakeKey)
-		{
-			if (drivetrain.slipRatio < 0.2f)
-				brake += Time.deltaTime / throttleTime;
-			else
-				brake += Time.deltaTime / throttleTimeTraction;
-			throttle = 0;
-			throttleInput -= Time.deltaTime / throttleTime;
-		}
-		else 
-		{
-			if (drivetrain.slipRatio < 0.2f)
-				brake -= Time.deltaTime / throttleReleaseTime;
-			else
-				brake -= Time.deltaTime / throttleReleaseTimeTraction;
-		}
-		brake = Mathf.Clamp01 (brake);
-		throttleInput = Mathf.Clamp (throttleInput, -1, 1);
-				
-		// Handbrake
-		handbrake = Mathf.Clamp01 ( handbrake + (Input.GetKey (KeyCode.Space)? Time.deltaTime: -Time.deltaTime) );
+				throttleInput += Time.deltaTime / throttleTime;
+			}
+			else if (accelKey)
+			{
+				if (drivetrain.slipRatio < 0.10f)
+					throttle += Time.deltaTime / throttleTime;
+				else if (!tractionControl)
+					throttle += Time.deltaTime / throttleTimeTraction;
+				else
+					throttle -= Time.deltaTime / throttleReleaseTime;
+	
+				if (throttleInput < 0)
+					throttleInput = 0;
+				throttleInput += Time.deltaTime / throttleTime;
+				brake = 0;
+			}
+			else 
+			{
+				if (drivetrain.slipRatio < 0.2f)
+					throttle -= Time.deltaTime / throttleReleaseTime;
+				else
+					throttle -= Time.deltaTime / throttleReleaseTimeTraction;
+			}
+			throttle = Mathf.Clamp01 (throttle);
+	
+			if (brakeKey)
+			{
+				if (drivetrain.slipRatio < 0.2f)
+					brake += Time.deltaTime / throttleTime;
+				else
+					brake += Time.deltaTime / throttleTimeTraction;
+				throttle = 0;
+				throttleInput -= Time.deltaTime / throttleTime;
+			}
+			else 
+			{
+				if (drivetrain.slipRatio < 0.2f)
+					brake -= Time.deltaTime / throttleReleaseTime;
+				else
+					brake -= Time.deltaTime / throttleReleaseTimeTraction;
+			}
+			brake = Mathf.Clamp01 (brake);
+			throttleInput = Mathf.Clamp (throttleInput, -1, 1);
+					
+			// Handbrake
+			handbrake = Mathf.Clamp01 ( handbrake + (Input.GetKey (KeyCode.Space)? Time.deltaTime: -Time.deltaTime) );
+			
+			// Gear shifting
+			float shiftThrottleFactor = Mathf.Clamp01((Time.time - lastShiftTime)/shiftSpeed);
+			drivetrain.throttle = throttle * shiftThrottleFactor;
+			drivetrain.throttleInput = throttleInput;
+			
+			if(Input.GetKeyDown(KeyCode.A))
+			{
+				lastShiftTime = Time.time;
+				drivetrain.ShiftUp ();
+			}
+			if(Input.GetKeyDown(KeyCode.Z))
+			{
+				lastShiftTime = Time.time;
+				drivetrain.ShiftDown ();
+			}
+	
+			// Apply inputs
+			foreach(Wheel w in wheels)
+			{
+				w.brake = brake;
+				w.handbrake = handbrake;
+				w.steering = steering;
+			}
+		}	
+			
 		
-		// Gear shifting
-		float shiftThrottleFactor = Mathf.Clamp01((Time.time - lastShiftTime)/shiftSpeed);
-		drivetrain.throttle = throttle * shiftThrottleFactor;
-		drivetrain.throttleInput = throttleInput;
-		
-		if(Input.GetKeyDown(KeyCode.A))
+		//State changes
+		if( centerOfMass.position.x > 1130 && centerOfMass.position.x < 1170 
+			&& centerOfMass.position.z > 525 && centerOfMass.position.z < 570
+			&& flags[1] == false)
 		{
-			lastShiftTime = Time.time;
-			drivetrain.ShiftUp ();
+			state = 1;
+			Time.timeScale = 0;
 		}
-		if(Input.GetKeyDown(KeyCode.Z))
-		{
-			lastShiftTime = Time.time;
-			drivetrain.ShiftDown ();
+		else {
+			state = 0;
+			Time.timeScale = 1;
 		}
-
-		// Apply inputs
-		foreach(Wheel w in wheels)
-		{
-			w.brake = brake;
-			w.handbrake = handbrake;
-			w.steering = steering;
-		}
+			
 	}
 	
 	void OnGUI()
 	{
-		GUI.Label(new Rect(Screen.width-100,60,100,200),"km/h: " + rigidbody.velocity.magnitude * 3.6f, "box");
-		tractionControl = GUI.Toggle(new Rect(0,80,300,20), tractionControl, "Traction Control (bypassed by shift key)");
+		if(state == 1){
+			// Make a box
+			GUI.Box(new Rect(Screen.width/2-100,Screen.height/2-50,200,100), "Checkpoint 1");
+			if(GUI.Button(new Rect(Screen.width/2-50,Screen.height/2,100,20), "Continue")) {
+				flags[1] = true;
+			}
+		}
+		GUI.Label(new Rect(Screen.width-250,60,200,50),"Center:" + centerOfMass.position +"\n" + "State: " + state, "box");
+		//GUI.Label(new Rect(Screen.width-100,60,100,200),"km/h: " + rigidbody.velocity.magnitude * 3.6f, "box");
+		//tractionControl = GUI.Toggle(new Rect(0,80,300,20), tractionControl, "Traction Control (bypassed by shift key)");
 	}
 }
