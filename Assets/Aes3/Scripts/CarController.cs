@@ -452,6 +452,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Slick bumper  (F = -20 Newtons)")) {
 				flags[5] = true;
+				//rigidbody.maxAngularVelocity
 			}
 		}
 		
@@ -474,6 +475,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing seats  (M = 60 KG)")) {
 				flags[7] = true;
+				rigidbody.mass = rigidbody.mass*0.85f;
 			}
 		}
 		
@@ -518,6 +520,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing hood  (M = 55 KG)")) {
 				flags[11] = true;
+				rigidbody.mass = rigidbody.mass*0.85f;
 			}
 		}
 		
@@ -561,6 +564,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing doors  (M = 70 KG)")) {
 				flags[15] = true;
+				rigidbody.mass = rigidbody.mass*0.85f;
 			}
 		}
 		
@@ -604,6 +608,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Scuba Gear  (M = 105 KG)")) {
 				flags[19] = true;
+				rigidbody.mass = rigidbody.mass*1.15f;
 			}
 		}
 		
@@ -647,6 +652,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Little Richie  (M = 97 KG)")) {
 				flags[23] = true;
+				rigidbody.mass = rigidbody.mass*1.15f;
 			}
 		}
 		
