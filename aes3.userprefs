@@ -1,6 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Aes3\Scripts\CarController.cs">
+    <Files>
+      <File FileName="Assets\Aes3\Scripts\FinishLap.cs" Line="43" Column="1" />
+      <File FileName="Assets\Aes3\Scripts\CarController.cs" Line="254" Column="5" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
