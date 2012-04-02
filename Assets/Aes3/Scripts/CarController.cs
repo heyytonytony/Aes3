@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-// This class is repsonsible for controlling inputs to the car.
+// This class is responsible for controlling inputs to the car.
 // Change this code to implement other input types, such as support for analogue input, or AI cars.
 [RequireComponent (typeof (Drivetrain))]
 public class CarController : MonoBehaviour {
@@ -105,7 +105,8 @@ public class CarController : MonoBehaviour {
 	
 	void Update () 
 	{
-		if(state == 0){
+		if(state == 0)
+		{
 			// Steering
 			Vector3 carDir = transform.forward;
 			float fVelo = rigidbody.velocity.magnitude;
@@ -224,6 +225,9 @@ public class CarController : MonoBehaviour {
 				w.handbrake = handbrake;
 				w.steering = steering;
 			}
+			
+			//laptime updating
+			lapTimes[currentLap] += Time.deltaTime;
 		}
 		
 		
@@ -235,18 +239,28 @@ public class CarController : MonoBehaviour {
 			state = 1;
 			Time.timeScale = 0;
 		}
-		else {
+		else if(currentLap == 10)
+		{
+			Time.timeScale = 0;
+		}
+		else
+		{
 			state = 0;
 			Time.timeScale = 1;
 		}
 	}
 	
+	public void setCurLap(int curLap)
+	{
+		currentLap = curLap;
+	}
+	
 	void OnGUI()
 	{
 		if(state == 1){
+			GUI.DrawTexture(new Rect(Screen.width/2-100, Screen.height/2-200, 200, 200), flag);
 			// Make a box
 			GUI.Box(new Rect(Screen.width/2-100,Screen.height/2-50,200,100), "Checkpoint 1");
-			GUI.DrawTexture(new Rect(15, 15, 200, 200), flag);
 			if(GUI.Button(new Rect(Screen.width/2-50,Screen.height/2,100,20), "Continue")) {
 				flags[1] = true;
 			}
@@ -260,11 +274,11 @@ public class CarController : MonoBehaviour {
 		
 		//elapsed time counter thing
 		GUI.BeginGroup(new Rect(10, 60, 200, 360));
-		GUI.Box(new Rect(0, 0, 200, 360), "");
+		GUI.Box(new Rect(0, 0, 200, 36*(currentLap+1)), "");
 		for(int x = 0; x < 10; x++)
 		{
-			if(lapTimes[x] > -1)
-				GUI.Label(new Rect(10, 6+x*36, 190, 36), "Lap " + (x+1) + ":\t\t" +lapTimes[x]);
+			if(lapTimes[x] > 0)
+				GUI.Label(new Rect(10, 6+x*36, 190, 36), "Lap " + (x+1) + ":\t\t" + lapTimes[x].ToString ("0.00"));
 		}
 		GUI.EndGroup();
 	}

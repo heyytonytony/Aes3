@@ -48,6 +48,7 @@
      <Compile Include="Assets\Aes3\Scripts\AntiRollBar.cs" />
      <Compile Include="Assets\Aes3\Scripts\CarController.cs" />
      <Compile Include="Assets\Aes3\Scripts\Drivetrain.cs" />
+     <Compile Include="Assets\Aes3\Scripts\FinishLap.cs" />
      <Compile Include="Assets\Aes3\Scripts\Skidmarks.cs" />
      <Compile Include="Assets\Aes3\Scripts\SoundController.cs" />
      <Compile Include="Assets\Aes3\Scripts\TractionHelper.cs" />
