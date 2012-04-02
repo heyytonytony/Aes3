@@ -229,26 +229,77 @@ public class CarController : MonoBehaviour {
 		
 		//State changes
 		if( centerOfMass.position.x > 1130 && centerOfMass.position.x < 1170 
-			&& centerOfMass.position.z > 525 && centerOfMass.position.z < 570
-			&& flags[1] == false)
+			&& centerOfMass.position.z > 525 && centerOfMass.position.z < 570)
 		{
-			state = 1;
-			Time.timeScale = 0;
+			if(flags[1] == false){
+				state = 1;
+				Time.timeScale = 0;
+				rigidbody.SetMaxAngularVelocity(0);
+			}
+			else if(flags[2] == false){
+				state = 2;
+			}
+			else if(flags[3] == false){
+				state = 3;
+			}
+			else if(flags[4] == false){
+				state = 4;
+			}
+			else if(flags[5] == false){
+				state = 5;
+			}
+			else {
+				state = 0;
+				Time.timeScale = 1;
+				rigidbody.SetMaxAngularVelocity(1);
+			}
 		}
-		else {
-			state = 0;
-			Time.timeScale = 1;
-		}
+
 	}
 	
 	void OnGUI()
 	{
 		if(state == 1){
 			// Make a box
-			GUI.Box(new Rect(Screen.width/2-100,Screen.height/2-50,200,100), "Checkpoint 1");
-			GUI.DrawTexture(new Rect(15, 15, 200, 200), flag);
-			if(GUI.Button(new Rect(Screen.width/2-50,Screen.height/2,100,20), "Continue")) {
+			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);
+			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 1\n\n This is your first checkpoint");
+			if(GUI.Button(new Rect(Screen.width/2-50,Screen.height/2+50,100,20), "Continue")) {
 				flags[1] = true;
+			}
+		}
+		if(state == 2){
+			// Make a box
+			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);			
+			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 1\n\n The point of these checkpoints\n is to allow you to change the\n variables of the physics\n equation F=MA");
+			if(GUI.Button(new Rect(Screen.width/2-50,Screen.height/2+50,100,20), "Continue")) {
+				flags[2] = true;
+			}
+		}
+		if(state == 3){
+			// Make a box
+			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);			
+			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 1\n\n The point of these changing\n the equations is so that\n you may better learn how they work.\n Selecting the proper answer\n makes your car go faster.");
+			if(GUI.Button(new Rect(Screen.width/2-50,Screen.height/2+50,100,20), "Continue")) {
+				flags[3] = true;
+			}
+		}
+		if(state == 4){
+			// Make a box
+			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);			
+			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 1\n\n For the first checkpoint \nwe will we will give you a choice\n of a flat bumper\n or a slick one.");
+			if(GUI.Button(new Rect(Screen.width/2-50,Screen.height/2+50,100,20), "Continue")) {
+				flags[4] = true;
+			}
+		}
+		if(state == 5){
+			// Make a box
+			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);			
+			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 1\n\n F=M*A \nor Acceleration = force / mass\n\n your mass will stay constant for now\n your choice is between negative \nwind resistance forces");
+			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+40,250,20), "Flat bumper  (F = -50 Newtons)")) {
+				flags[5] = true;
+			}
+			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Slick bumper  (F = -20 Newtons)")) {
+				flags[5] = true;
 			}
 		}
 		GUI.Label(new Rect(Screen.width-250,60,200,50),"Center:" + centerOfMass.position +"\n" + "State: " + state, "box");
