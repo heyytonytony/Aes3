@@ -76,9 +76,15 @@ public class CarController : MonoBehaviour {
 	// steering speed will be multiplied by the difference between optimal and current steering times this 
 	// factor, to make the correction easier.
 	public float steerCorrectionFactor = 4.0f;
+	
+	//lap times
+	float[] lapTimes = new float[10];
+	int currentLap = 0;
+	
 
 	// Used by SoundController to get average slip velo of all wheels for skid sounds.
-	public float slipVelo {
+	public float slipVelo
+	{
 		get {
 			float val = 0.0f;
 			foreach(Wheel w in wheels)
@@ -247,6 +253,17 @@ public class CarController : MonoBehaviour {
 		//GUI.Label(new Rect(Screen.width-100,60,100,200),"km/h: " + rigidbody.velocity.magnitude * 3.6f, "box");
 		//tractionControl = GUI.Toggle(new Rect(0,80,300,20), tractionControl, "Traction Control (bypassed by shift key)");
 		
-		GUI.Label(new Rect(Screen.width - 160, Screen.height - 80, 80, 20), Mathf.Round(rigidbody.velocity.magnitude * 3.6f) + " km/h");
+		GUI.Label(new Rect(Screen.width - 150, Screen.height - 80, 80, 20), Mathf.Round(rigidbody.velocity.magnitude * 3.6f) + " km/h");
+		//tractionControl = GUI.Toggle(new Rect(0,80,300,20), tractionControl, "Traction Control (bypassed by shift key)");
+		
+		//elapsed time counter thing
+		GUI.BeginGroup(new Rect(10, 60, 200, 360));
+		GUI.Box(new Rect(0, 0, 200, 360), "");
+		for(int x = 0; x < 10; x++)
+		{
+			if(lapTimes[x] > -1)
+				GUI.Label(new Rect(10, 6+x*36, 190, 36), "Lap " + (x+1) + ":\t\t" +lapTimes[x]);
+		}
+		GUI.EndGroup();
 	}
 }
