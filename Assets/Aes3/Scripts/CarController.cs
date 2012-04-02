@@ -9,6 +9,7 @@ public class CarController : MonoBehaviour {
 	//state
 	public int state = 0;
 	private bool[] flags = new bool[10];
+	public Texture2D flag;
 	
 	// Add all wheels of the car here, so brake and steering forces can be applied to them.
 	public Wheel[] wheels;
@@ -239,6 +240,7 @@ public class CarController : MonoBehaviour {
 		if(state == 1){
 			// Make a box
 			GUI.Box(new Rect(Screen.width/2-100,Screen.height/2-50,200,100), "Checkpoint 1");
+			GUI.DrawTexture(new Rect(15, 15, 200, 200), flag);
 			if(GUI.Button(new Rect(Screen.width/2-50,Screen.height/2,100,20), "Continue")) {
 				flags[1] = true;
 			}
