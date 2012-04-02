@@ -160,6 +160,16 @@ public class Drivetrain : MonoBehaviour {
 			gear --;
 	}
 	
+	public void setMaxTorque(float f)
+	{
+		maxTorque = f;
+	}
+	
+	public void setPowerRPM(float f)
+	{
+		powerRPM = f;
+	}
+	
 	// Debug GUI. Disable when not needed.
 	void OnGUI ()
 	{

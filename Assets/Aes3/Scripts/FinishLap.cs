@@ -8,7 +8,7 @@ public class FinishLap : MonoBehaviour
 	private CarController car;
 	private Transform carCoG;
 	private int curLap, wrongLaps;
-	private bool enter, exit, wrong;
+	private bool enter, exit;
 	
 	void Start()
 	{
@@ -22,8 +22,6 @@ public class FinishLap : MonoBehaviour
 		lapping = true;
 		if(carCoG.position.x < 845)
 			enter = true;
-		else
-			wrong = true;
 	}
 	
 	void OnTriggerExit()
@@ -32,7 +30,6 @@ public class FinishLap : MonoBehaviour
 		if(carCoG.position.x > 862)
 		{
 			exit = true;
-			wrong = false;
 		}
 		else
 			wrongLaps++;

@@ -9,7 +9,8 @@ public class AerodynamicResistance : MonoBehaviour {
 	// A higher Z-Friction coefficient will make a car slower.
 	public Vector3 coefficients = new Vector3(3.0f, 4.0f, 0.5f);
 
-	void Update () {
+	void Update ()
+	{
 		// Velocity in local space.
 		Vector3 localVelo = transform.InverseTransformDirection(rigidbody.velocity);
 		
@@ -19,5 +20,10 @@ public class AerodynamicResistance : MonoBehaviour {
 		// Calculate and apply aerodynamic force.
 		Vector3 airResistance = Vector3.Scale( Vector3.Scale(localVelo, absLocalVelo), -2*coefficients);
 		rigidbody.AddForce( transform.TransformDirection( airResistance ) );
+	}
+	
+	public void setZRes(float z)
+	{
+		coefficients.z = z;
 	}
 }

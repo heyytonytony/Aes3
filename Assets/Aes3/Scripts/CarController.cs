@@ -37,6 +37,9 @@ public class CarController : MonoBehaviour {
 	// cached Drivetrain reference
 	Drivetrain drivetrain;
 	
+	// aerodynamic resistance reference
+	AerodynamicResistance ar;
+	
 	// How long the car takes to shift gears
 	public float shiftSpeed = 0.8f;
 	
@@ -101,6 +104,7 @@ public class CarController : MonoBehaviour {
 			rigidbody.centerOfMass = centerOfMass.localPosition;
 		rigidbody.inertiaTensor *= inertiaFactor;
 		drivetrain = GetComponent (typeof (Drivetrain)) as Drivetrain;
+		ar = GetComponent(typeof(AerodynamicResistance)) as AerodynamicResistance;
 	}
 	
 	void Update () 
@@ -448,9 +452,11 @@ public class CarController : MonoBehaviour {
 			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);			
 			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 1\n\n F=M*A \nor Acceleration = force / mass\n\n your mass will stay constant for now\n your choice is between negative \nwind resistance forces");
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+40,250,20), "Flat bumper  (F = -50 Newtons)")) {
+				ar.setZRes(0.3f);
 				flags[5] = true;
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Slick bumper  (F = -20 Newtons)")) {
+				ar.setZRes(0);
 				flags[5] = true;
 				//rigidbody.maxAngularVelocity
 			}
@@ -496,7 +502,7 @@ public class CarController : MonoBehaviour {
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+40,250,20), "Stock wheels  (F = 400 Newtons)")) {
 				flags[9] = true;
 			}
-			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing seats  (F = 450 Newtons)")) {
+			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing wheels  (F = 700 Newtons)")) {
 				flags[9] = true;
 			}
 		}
@@ -506,7 +512,7 @@ public class CarController : MonoBehaviour {
 		if(state == 10){
 			// Make a box
 			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);			
-			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 4\n\n For the first checkpoint \nwe will we will give you a choice\n of a stock hood\n or lighter racing hood.");
+			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 4\n\n For the fourth checkpoint \nwe will we will give you a choice\n of a stock hood\n or lighter racing hood.");
 			if(GUI.Button(new Rect(Screen.width/2-50,Screen.height/2+50,100,20), "Continue")) {
 				flags[10] = true;
 			}
@@ -515,10 +521,10 @@ public class CarController : MonoBehaviour {
 			// Make a box
 			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);			
 			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 4\n\n F=M*A \nor Acceleration = force / mass\n\n your force will stay constant for now\n your choice is between lighter mass \n or heavier mass.");
-			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+40,250,20), "Stock hood  (M = 90 KG)")) {
+			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+40,250,20), "Stock hood  (M = 34 KG)")) {
 				flags[11] = true;
 			}
-			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing hood  (M = 55 KG)")) {
+			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing hood  (M = 16 KG)")) {
 				flags[11] = true;
 				rigidbody.mass = rigidbody.mass*0.85f;
 			}
@@ -537,10 +543,12 @@ public class CarController : MonoBehaviour {
 			// Make a box
 			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);			
 			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 5\n\n F=M*A \nor Acceleration = force / mass\n\n your mass will stay constant for now\n your choice is between engines. \n");
-			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+40,250,20), "Stock engine  (F = 600 Newtons)")) {
+			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+40,250,20), "Stock engine  (F = 900 Newtons)")) {
+				drivetrain.setMaxTorque(900f);
 				flags[13] = true;
 			}
-			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "new engine  (F = 800 Newtons)")) {
+			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Turbo engine  (F = 1200 Newtons)")) {
+				drivetrain.setMaxTorque(1200f);
 				flags[13] = true;
 			}
 		}
@@ -582,9 +590,11 @@ public class CarController : MonoBehaviour {
 			GUI.DrawTexture(new Rect(Screen.width/2-200, Screen.height/2-300, 400, 400), flag);			
 			GUI.Box(new Rect(Screen.width/2-150,Screen.height/2-150,300,300), "\n\nCheckpoint 7\n\n F=M*A \nor Acceleration = force / mass\n\n your mass will stay constant for now\n your choice is between turbos. \n");
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+40,250,20), "No turbo  (F = 600 Newtons)")) {
+				drivetrain.setPowerRPM(7000f);
 				flags[17] = true;
 			}
-			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Add a turbo  (F = 800 Newtons)")) {
+			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Add turbo  (F = 800 Newtons)")) {
+				drivetrain.setPowerRPM(8400f);
 				flags[17] = true;
 			}
 		}
