@@ -481,7 +481,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing seats  (M = 60 KG)")) {
 				flags[7] = true;
-				rigidbody.mass = rigidbody.mass*0.85f;
+				rigidbody.mass = rigidbody.mass-110f;
 			}
 		}
 		
@@ -503,8 +503,8 @@ public class CarController : MonoBehaviour {
 				flags[9] = true;
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing wheels  (F = 700 Newtons)")) {
+				steerCorrectionFactor = 10;
 				flags[9] = true;
-				rigidbody.mass = rigidbody.mass*0.9f;
 			}
 		}
 		
@@ -527,7 +527,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing hood  (M = 16 KG)")) {
 				flags[11] = true;
-				rigidbody.mass = rigidbody.mass*0.85f;
+				rigidbody.mass = rigidbody.mass-18f;
 			}
 		}
 		
@@ -573,7 +573,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing doors  (M = 70 KG)")) {
 				flags[15] = true;
-				rigidbody.mass = rigidbody.mass*0.85f;
+				rigidbody.mass = rigidbody.mass-15f;
 			}
 		}
 		
@@ -619,7 +619,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Scuba Gear  (M = 105 KG)")) {
 				flags[19] = true;
-				rigidbody.mass = rigidbody.mass*1.15f;
+				rigidbody.mass = rigidbody.mass+105f;
 			}
 		}
 		
@@ -640,8 +640,8 @@ public class CarController : MonoBehaviour {
 				flags[21] = true;
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "V8 engine  (F = 900 Newtons)")) {
+				drivetrain.maxRPM = 9700;
 				flags[21] = true;
-				rigidbody.mass = rigidbody.mass*0.9f;
 			}
 		}
 		
@@ -664,7 +664,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Little Richie  (M = 97 KG)")) {
 				flags[23] = true;
-				rigidbody.mass = rigidbody.mass*1.15f;
+				rigidbody.mass = rigidbody.mass+97f;
 			}
 		}
 		
