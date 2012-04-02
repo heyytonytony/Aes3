@@ -504,6 +504,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "Racing wheels  (F = 700 Newtons)")) {
 				flags[9] = true;
+				rigidbody.mass = rigidbody.mass*0.9f;
 			}
 		}
 		
@@ -640,6 +641,7 @@ public class CarController : MonoBehaviour {
 			}
 			if(GUI.Button(new Rect(Screen.width/2-125,Screen.height/2+70,250,20), "V8 engine  (F = 900 Newtons)")) {
 				flags[21] = true;
+				rigidbody.mass = rigidbody.mass*0.9f;
 			}
 		}
 		
